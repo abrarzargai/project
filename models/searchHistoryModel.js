@@ -5,7 +5,7 @@ const searchHistorySchema = new mongoose.Schema(
       type: String,
       required: [true, "Please Enter gener type"],
     },
-    User: {
+    user: {
         required: [true, "Please Enter User Id"],
         type: mongoose.Types.ObjectId,
         ref: 'User',

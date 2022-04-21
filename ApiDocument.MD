@@ -62,3 +62,40 @@ Body {
 ## getAllUsers
 - Url : /api/user/getall 
 - Method: Get
+
+## ##################### WatchList ######
+
+## Add
+- Url : /api/watchList/add 
+- Method: post
+Body {
+    description (string) (Must)
+    movieId (string) (Must)
+    title (string) (Must)
+    image (string) (Must)
+    user (mongoDb Id of user) (Must)
+}
+
+## Add
+- Url : /api/watchList/delete 
+- Method: delete
+Body {
+    Id (mongoDb Id of watchlist) (Must)
+}
+
+## getOneUserWatchList (it will sent you array of all wishlist for a single user)
+- Url : /api/watchList/getOneUserWatchList 
+- Method: Post
+Body {
+    user (mongoDb Id of user) (Must)
+}
+
+## ##################### SearchHistory ######
+
+## add
+- Url : /api/SearchHistory/add 
+- Method: Post
+Body {
+    user (mongoDb Id of user) (Must)
+    gener (string) (must) ==> ( it will be like ACTION, ADVANTURE, HORROR, THRILLER ,CRIME etc)
+}

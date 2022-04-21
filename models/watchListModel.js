@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const watchlistSchema = new mongoose.Schema(
   {
+    movieId: {
+        type: String,
+        required: [true, "Please Enter Your movieId"],
+      },
     image: {
       type: String,
       required: [true, "Please Enter Your image"],
@@ -13,7 +17,7 @@ const watchlistSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please Enter Your description"],
     },
-    User: {
+    user: {
         required: [true, "Please Enter User Id"],
         type: mongoose.Types.ObjectId,
         ref: 'User',
