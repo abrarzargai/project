@@ -9,5 +9,6 @@ route.patch('/updatepassword', UserServices.UpdatePassword);
 route.put('/update', UserServices.update);
 route.get('/getAll', UserServices.getall);
 route.post('/getOne', UserServices.getOne);
+route.delete('/delete', UserServices.delete);
 
 module.exports = route;
