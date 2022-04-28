@@ -1,0 +1,30 @@
+const express = require("express");
+const route = express.Router();
+const puppeteer = require("puppeteer");
+/***************Routes************/
+
+route.post("/", async (req, res, next) => {
+  console.log("scraping Hit");
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  const url = 'https://www.imdb.com/video/imdb/vi2333017881/imdb/embed'
+  const url2 = 'https://stackoverflow.com/questions/36506546/dynamodb-key-element-does-not-match-the-schema'
+  await page.goto(url);
+
+  title = await page.evaluate(async() => {
+//     return document.querySelectorAll("jw-video")
+   return document.querySelector('#imdb-video ').innerHTML
+//     return document.querySelector("#firstHeading").textContent.trim();
+  });
+  
+  const temp = title.toString();
+
+  await browser.close();
+ return res.status(200).json({data:trim})
+});
+
+module.exports = route;
+
+
+
+// https://imdb-video.media-imdb.com/vi2333017881/1434659454657-dx9ykf-1564570640937.mp4?Expires=1651175548&Signature=Ui3cFVsU1hzb64iLBbXpbjzdSznSlkSNwMMNE227DDkqyiMKXRmkCChYehJy~dQ7K4V9rKzqmgpz2ou9gqcnoLtFlPDS~FMmHyKaYf5WDRijMBiaWkejBXQ8VbskXXS7O5XF3K4hM9KzBWqxxmxPF3xN7lgZflVUp-l1hDUCgAWGrXB9sMl7tCcJF0t63l836DR3oHMbOqW73-Ir04yx~7-0LaVbFUCJcGImStWYJsI8Ox54PbP-LWU4YK0gjzVU46ll788eYE8fPY4uEP1c90uYsXwDaKU-eF4yRCo3CsTeZdCdVyAXly9MsCXLuAAzJyWcV~U-~kq5I4~JJM32Xg__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA

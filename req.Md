@@ -23,6 +23,11 @@
 --- remove()
 --- getAllForOneUser()
 
+## SearchHistory 
+- User
+- genre
+--- add()
+--- getAllForOneUser()
 
 ## Recomendation 
 - image
