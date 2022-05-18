@@ -18,10 +18,10 @@ const signToken = (user) => {
 /***************Services************/
 
 exports.SignUp = catchAsync(async (req, res, next) => {
-  const User = await userModel.findOne({ email: req.body.Email });
+  const User = await userModel.findOne({ Email: req.body.Email });
   console.log("User :", User);
-  if (User) {
-    const Record = await userModel.create({ ...req.body, UserId: UserID });
+  if (!User) {
+    const Record = await userModel.create({ ...req.body });
     console.log("Record saved", Record);
     if (!Record) {
       throw new Error("Error! User cannot be created");
@@ -86,7 +86,7 @@ exports.UpdatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.update = catchAsync(async (req, res, next) => {
-  const User = await AdminModel.find({ Email: req.body.Email });
+  const User = await userModel.find({ Email: req.body.Email });
   console.log("user===>", User[0]);
   if (User[0]) {
     const Record = await userModel.updateOne(
@@ -114,14 +114,28 @@ exports.getall = catchAsync(async (req, res, next) => {
 });
 
 exports.getOne = catchAsync(async (req, res, next) => {
-  const User = userModel.find({ Email: req.body.Email });
+  console.log("getOne hit")
+  const User = await userModel.findOne({ _id: req.jwt.userdata.id });
+  console.log("User",User)
   if (User) {
-    return res.status(200).json({
-      success: true,
-      message: "User Record Found",
-      User
-    });
+    return res.status(200).json(User);
   } else {
     return next(new Error("User Not Found"));
   }
+});
+
+exports.delete = catchAsync(async (req, res, next) => {
+
+    const Record = await userModel.deleteOne(
+      { Email: req.body.Email },
+      { ...req.body }
+    );
+    if (Record.deletedCount == 0) {
+      return next(new Error('Error! user not found'))
+    }else {
+      return res.status(200).json({
+        success: true, message: "user Deleted Successfully"
+    })
+    }
+
 });
