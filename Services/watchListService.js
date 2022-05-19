@@ -5,9 +5,9 @@ const catchAsync = require("../utils/catchAsync");
 /***************Services************/
 
 exports.Add = catchAsync(async (req, res, next) => {
-  const isFound = await watchListModel.findOne({ movieId: req.body.movieId,user:req.body.user });
+  const isFound = await watchListModel.findOne({ movieId: req.body.movieId, user:req.jwt.userdata.id });
   if (!isFound) {
-    const Record = await watchListModel.create({ ...req.body });
+    const Record = await watchListModel.create({ ...req.body, user: req.jwt.userdata.id });
     console.log("Record saved", Record);
     if (!Record) {
       throw new Error("Error! movie cannot be added to watchlist at this time");
@@ -19,17 +19,20 @@ exports.Add = catchAsync(async (req, res, next) => {
       });
     }
   } else {
-    return next(new Error("Error! you have already added this movie to watch list"));
+    return res.status(201).json({
+      success: false,
+      message: "Error! you have already added this movie to watch list",
+    });
+    // return next(new Error("Error! you have already added this movie to watch list"));
   }
 });
 
 
 exports.getOneUserWatchList = catchAsync(async (req, res, next) => {
-    console.log(req.body)
     const Data = await watchListModel.aggregate([
         {
             $match: {
-              user: ObjectId(req.body.user),
+              user: req.jwt.userdata.id,
             },
           },
         {
