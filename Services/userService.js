@@ -115,14 +115,10 @@ exports.getall = catchAsync(async (req, res, next) => {
 
 exports.getOne = catchAsync(async (req, res, next) => {
   console.log("getOne hit")
-  const User = await userModel.findOne({ Email: req.body.Email });
+  const User = await userModel.findOne({ _id: req.jwt.userdata.id });
   console.log("User",User)
   if (User) {
-    return res.status(200).json({
-      success: true,
-      message: "User Record Found",
-      User : User
-    });
+    return res.status(200).json(User);
   } else {
     return next(new Error("User Not Found"));
   }
