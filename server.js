@@ -12,7 +12,8 @@ process.on('uncaughtException', err => {
 
 const app = require('./app');
 
- const database = process.env.DATABASE
+//  const database = process.env.DATABASE
+ const database = 'mongodb://localhost:27017'
 
 // Connect the database
 mongoose.connect(database, {

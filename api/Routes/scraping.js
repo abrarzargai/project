@@ -9,7 +9,7 @@ const id = '#imdb-video'
 route.post("/", async (req, res, next) => {
   console.log("scraping Hit");
   let $ ;
-  const data = await  axios(url).then((response) => {
+  const data = await  axios(req.body.url || url).then((response) => {
     
     const html_data = response.data;
     $ = cheerio.load(html_data);

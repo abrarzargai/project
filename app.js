@@ -5,12 +5,29 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
-
-
-const userRoutes = require('./api/api');
+var bodyParser = require('body-parser')
+const Routes = require('./api/api');
 const globalErrHandler = require('./utils/errorController');
 const AppError = require('./utils/appError');
 const app = express();
+
+const multer = require('multer')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+       
+            cb(null, "images" + Date.now() + file.originalname)
+    }
+})
+
+var upload = multer({ storage: storage })
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 // Allow Cross-Origin requests
 app.use(cors());
@@ -24,6 +41,8 @@ const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     message: 'Too Many Request from this IP, please try again in an hour'
 });
+
+
 app.use('/apis', limiter);
 
 // Body parser, reading data from body into req.body
@@ -40,8 +59,10 @@ app.use(xss());
 // Prevent parameter pollution
 app.use(hpp());
 
+//for Images
+app.use('/images', express.static('uploads'));
 // Routes
-app.use('/api', userRoutes);
+app.use('/api', upload.array('Image',10), Routes);
 
 // handle undefined Routes
 app.use('*', (req, res, next) => {

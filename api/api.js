@@ -7,6 +7,7 @@ const Auth = require('./Routes/Auth')
 const watchList = require('./Routes/watchList')
 const SearchHistory = require('./Routes/SearchHistory')
 const scraping = require('./Routes/scraping')
+const cinema = require('./Routes/cinema')
 
 
 
@@ -15,6 +16,7 @@ router.use('/user',User);
 router.use('/auth', Auth);
 router.use('/watchList', watchList);
 router.use('/scraping', scraping);
+router.use('/cinema', cinema);
 
 
 
