@@ -26,10 +26,12 @@ exports.SignUp = catchAsync(async (req, res, next) => {
     if (!Record) {
       throw new Error("Error! User cannot be created");
     } else {
+      const token = signToken(Record);
       return res.status(201).json({
         success: true,
         message: "Account Created Successfully",
-        Record,
+        User: Record,
+        token
       });
     }
   } else {
