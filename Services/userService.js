@@ -26,10 +26,12 @@ exports.SignUp = catchAsync(async (req, res, next) => {
     if (!Record) {
       throw new Error("Error! User cannot be created");
     } else {
+      const token = signToken(Record);
       return res.status(201).json({
         success: true,
         message: "Account Created Successfully",
-        Record,
+        User: Record,
+        token
       });
     }
   } else {
@@ -107,22 +109,18 @@ exports.update = catchAsync(async (req, res, next) => {
 });
 
 exports.getall = catchAsync(async (req, res, next) => {
-    const User = await userModel.find();
-        return res.status(200).json({
-          User
-        });
+  const User = await userModel.find();
+  return res.status(200).json({
+    User
+  });
 });
 
 exports.getOne = catchAsync(async (req, res, next) => {
   console.log("getOne hit")
-  const User = await userModel.findOne({ Email: req.body.Email });
-  console.log("User",User)
+  const User = await userModel.findOne({ _id: req.jwt.userdata.id });
+  console.log("User", User)
   if (User) {
-    return res.status(200).json({
-      success: true,
-      message: "User Record Found",
-      User : User
-    });
+    return res.status(200).json(User);
   } else {
     return next(new Error("User Not Found"));
   }
@@ -130,16 +128,16 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
 exports.delete = catchAsync(async (req, res, next) => {
 
-    const Record = await userModel.deleteOne(
-      { Email: req.body.Email },
-      { ...req.body }
-    );
-    if (Record.deletedCount == 0) {
-      return next(new Error('Error! user not found'))
-    }else {
-      return res.status(200).json({
-        success: true, message: "user Deleted Successfully"
+  const Record = await userModel.deleteOne(
+    { Email: req.body.Email },
+    { ...req.body }
+  );
+  if (Record.deletedCount == 0) {
+    return next(new Error('Error! user not found'))
+  } else {
+    return res.status(200).json({
+      success: true, message: "user Deleted Successfully"
     })
-    }
+  }
 
 });
