@@ -1,38 +1,26 @@
-
 const catchAsync = require('../../utils/catchAsync');
 const userModel = require('../../models/userModel');
 const jwt = require('jsonwebtoken');
-exports.authenticate = catchAsync(async (req, res, next) => {
-	//getting token and check is it there
-	let token;
-	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-		token = req.headers.authorization.split(' ')[1];
-	} else if (req.session.jwt) {
-		token = req.session.jwt;
-	}
-	if (!token) {
-		return next(new AppError(ERRORS.UNAUTHORIZED.NOT_LOGGED_IN, STATUS_CODE.UNAUTHORIZED));
-	}
-	//verification token
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
-	//check if user sitll exists
-	const currentUser = await User.findById(decoded.userdata.id).populate('customer company');
 
-	if (!currentUser.active || currentUser.banned) {
-		return next(
-			new AppError(
-				`Your account is Banned or Inactive, Please contact the customer support`,
-				STATUS_CODE.NOT_FOUND
-			)
-		);
+exports.authenticate = catchAsync(async (req, res, next) => {
+	console.log(req.headers['authorization'])
+
+	if (req.headers['authorization']) {
+		try {
+			let authorization = req.headers['authorization'].split(' ');
+			if (authorization[0] !== 'Bearer') {
+				throw new Error('Bearer Missing in token')
+			} else {
+				req.jwt = jwt.verify(authorization[1], process.env.JWT_SECRET);
+				return next();
+			}
+		} catch (err) {
+			throw new Error('invalid User')
+
+		}
+	} else {
+		throw new Error('Token Not Found')
 	}
-	//check if user changed password after the token was issued
-	if (currentUser.changedPasswordAfter(decoded.iat)) {
-		return next(new AppError(ERRORS.UNAUTHORIZED.INVALID_JWT, STATUS_CODE.UNAUTHORIZED));
-	}
-	//Grant access to protected route
-	req.user = currentUser;
-	next();
 });
 
 exports.restrictTo = (...role) => {

@@ -107,16 +107,16 @@ exports.update = catchAsync(async (req, res, next) => {
 });
 
 exports.getall = catchAsync(async (req, res, next) => {
-    const User = await userModel.find();
-        return res.status(200).json({
-          User
-        });
+  const User = await userModel.find();
+  return res.status(200).json({
+    User
+  });
 });
 
 exports.getOne = catchAsync(async (req, res, next) => {
   console.log("getOne hit")
   const User = await userModel.findOne({ _id: req.jwt.userdata.id });
-  console.log("User",User)
+  console.log("User", User)
   if (User) {
     return res.status(200).json(User);
   } else {
@@ -126,16 +126,16 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
 exports.delete = catchAsync(async (req, res, next) => {
 
-    const Record = await userModel.deleteOne(
-      { Email: req.body.Email },
-      { ...req.body }
-    );
-    if (Record.deletedCount == 0) {
-      return next(new Error('Error! user not found'))
-    }else {
-      return res.status(200).json({
-        success: true, message: "user Deleted Successfully"
+  const Record = await userModel.deleteOne(
+    { Email: req.body.Email },
+    { ...req.body }
+  );
+  if (Record.deletedCount == 0) {
+    return next(new Error('Error! user not found'))
+  } else {
+    return res.status(200).json({
+      success: true, message: "user Deleted Successfully"
     })
-    }
+  }
 
 });
