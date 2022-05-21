@@ -6,10 +6,10 @@ const middleware = require('../Middleware/auth');
 
 route.post('/signup', UserServices.SignUp);
 route.post('/login', UserServices.Login);
-route.patch('/updatepassword', UserServices.UpdatePassword);
-route.put('/update', UserServices.update);
+route.patch('/updatepassword', middleware.authenticate, UserServices.UpdatePassword);
+route.put('/update', middleware.authenticate, UserServices.update);
 route.get('/getAll', UserServices.getall);
-route.post('/getOne', middleware.authenticate, UserServices.getOne);
+route.get('/getOne', middleware.authenticate, UserServices.getOne);
 route.delete('/delete', UserServices.delete);
 
 module.exports = route;

@@ -7,7 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 /***************Services************/
 
 exports.Add = catchAsync(async (req, res, next) => {
-  const isFound = await watchListModel.findOne({ movieId: req.body.movieId, user:req.jwt.userdata.id });
+  const isFound = await watchListModel.findOne({ movieId: req.body.movieId, user: req.jwt.userdata.id });
   if (!isFound) {
     const Record = await watchListModel.create({ ...req.body, user: req.jwt.userdata.id });
     console.log("Record saved", Record);
@@ -32,46 +32,47 @@ exports.Add = catchAsync(async (req, res, next) => {
 
 exports.getOneUserWatchList = catchAsync(async (req, res, next) => {
   console.log(req.jwt.userdata.id)
-    const Data = await watchListModel.aggregate([
-        {
-            $match: {
-              user: ObjectId(req.jwt.userdata.id),
-            },
-          },
-        {
-          $lookup: {
-            from: "users", // other table name
-            localField: "user", // name of users table field
-            foreignField: "_id", // name of userinfo table field
-            as: "user", // alias for userinfo table
-          },
-        },
-      ]);
-      console.log(Data)
+  const Data = await watchListModel.aggregate([
+    {
+      $match: {
+        user: ObjectId(req.jwt.userdata.id),
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // other table name
+        localField: "user", // name of users table field
+        foreignField: "_id", // name of userinfo table field
+        as: "user", // alias for userinfo table
+      },
+    },
+  ]);
+  console.log(Data)
 
-        return res.status(200).json({
-            Data:Data || []
-        })
-  });
-
-
-  exports.Delete = catchAsync(async (req, res, next) => {
-    try {
-        const Record = await watchListModel.deleteOne({ "_id": req.body.Id });
-        if (Record.deletedCount == 0) {
-            return res.status(500).json({
-                success: false, message: "Error!  Record Details Not found for this Id"
-            })
-        }
-
-        return res.status(200).json({
-            success: true, message: "Record Deleted Successfully"
-        })
+  return res.status(200).json({
+    Data: Data || []
+  })
+});
 
 
-    } catch (error) {
-        return res.status(500).json({
-            success: false, message: "Error!  Record not found for this Id"
-        })
+exports.Delete = catchAsync(async (req, res, next) => {
+  console.log(req.body)
+  try {
+    const Record = await watchListModel.deleteOne({ "_id": req.body._id });
+    if (Record.deletedCount == 0) {
+      return res.status(500).json({
+        success: false, message: "Error!  Record Details Not found for this Id"
+      })
     }
+
+    return res.status(200).json({
+      success: true, message: "Record Deleted Successfully"
+    })
+
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false, message: "Error!  Record not found for this Id"
+    })
+  }
 })
