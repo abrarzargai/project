@@ -13,7 +13,7 @@ const scraping = require('./Routes/scraping')
 /*********Main Api**********/
 router.use('/user',User);
 router.use('/auth', Auth);
-router.use('/watchList', watchList);
+router.use('/watchlist', watchList);
 router.use('/scraping', scraping);
 
 

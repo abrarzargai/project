@@ -6,6 +6,6 @@ const middleware = require('../Middleware/auth');
 
 route.post('/add', middleware.authenticate, watchListService.Add);
 route.delete('/delete', middleware.authenticate, watchListService.Delete);
-route.post('/getOneUserWatchList', middleware.authenticate, watchListService.getOneUserWatchList);
+route.get('/getOneUserWatchList', middleware.authenticate, watchListService.getOneUserWatchList);
 
 module.exports = route;
