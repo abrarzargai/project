@@ -29,6 +29,7 @@ exports.Add = catchAsync(async (req, res, next) => {
 
 
 exports.getOneUserWatchList = catchAsync(async (req, res, next) => {
+  console.log(req.jwt.userdata.id)
     const Data = await watchListModel.aggregate([
         {
             $match: {
