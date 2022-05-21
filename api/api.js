@@ -14,7 +14,7 @@ const cinema = require('./Routes/cinema')
 /*********Main Api**********/
 router.use('/user',User);
 router.use('/auth', Auth);
-router.use('/watchList', watchList);
+router.use('/watchlist', watchList);
 router.use('/scraping', scraping);
 router.use('/cinema', cinema);
 

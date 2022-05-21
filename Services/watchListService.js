@@ -1,5 +1,7 @@
 const watchListModel = require("../models/watchListModel");
 const catchAsync = require("../utils/catchAsync");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 
 /***************Services************/
@@ -29,11 +31,11 @@ exports.Add = catchAsync(async (req, res, next) => {
 
 
 exports.getOneUserWatchList = catchAsync(async (req, res, next) => {
-  console.log(req.jwt.userdata.id,"req.jwt.userdata.id")
+  console.log(req.jwt.userdata.id)
     const Data = await watchListModel.aggregate([
         {
             $match: {
-              user: req.jwt.userdata.id,
+              user: ObjectId(req.jwt.userdata.id),
             },
           },
         {
