@@ -68,12 +68,12 @@ exports.Login = catchAsync(async (req, res, next) => {
 });
 
 exports.UpdatePassword = catchAsync(async (req, res, next) => {
-  const User = await userModel.find({ Email: req.body.Email });
+  const User = await userModel.find({ _id: req.jwt.userdata.id });
   console.log("user===>", User[0]);
   if (User[0]) {
     if (await argon2.verify(User[0].Password, req.body.OldPassword)) {
       const Record = await userModel.updateOne(
-        { Email: req.body.Email },
+        { _id: req.jwt.userdata.id },
         { Password: req.body.NewPassword }
       );
 
