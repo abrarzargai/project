@@ -9,7 +9,7 @@ route.post('/login', UserServices.Login);
 route.patch('/updatepassword', UserServices.UpdatePassword);
 route.put('/update', UserServices.update);
 route.get('/getAll', UserServices.getall);
-route.post('/getOne', middleware.authenticate, UserServices.getOne);
+route.get('/getOne', middleware.authenticate, UserServices.getOne);
 route.delete('/delete', UserServices.delete);
 
 module.exports = route;
