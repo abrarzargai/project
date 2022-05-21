@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please Enter your gener3"],
     },
-    Genre: [String],
     Age: {
       type: Number,
       required: [true, "Please Enter your Age"],
@@ -60,4 +59,3 @@ userSchema.pre("updateOne", async function (next) {
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
-
